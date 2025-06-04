@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arbeitszeitrechner</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #2196f3;
+            --primary-color-light: #bbdefb;
+            --primary-color-dark: #1976d2;
+            --background-color: #e3f2fd;
+            --card-background-color: #ffffff;
+            --text-color: #333333;
+            --text-color-light: #555555;
+            --border-color: #dddddd;
+            --error-color: #f44336;
+            --success-color: #4caf50;
+            --font-family: 'Roboto', sans-serif;
+        }
+
+        body {
+            font-family: var(--font-family);
+            background-color: var(--background-color);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            box-sizing: border-box;
+        }
+
+        .container-card {
+            background-color: var(--card-background-color);
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), 0 6px 20px rgba(0, 0, 0, 0.1);
+            padding: 24px;
+            width: 100%;
+            max-width: 500px;
+            box-sizing: border-box;
+        }
+
+        header h1 {
+            color: var(--primary-color);
+            font-size: 2em;
+            font-weight: 500;
+            margin-bottom: 8px;
+            text-align: center;
+        }
+
+        header p {
+            color: var(--text-color-light);
+            font-size: 1em;
+            margin-bottom: 24px;
+            text-align: center;
+        }
+
+        .form-section h2 {
+            color: var(--primary-color-dark);
+            font-size: 1.25em;
+            font-weight: 500;
+            margin-top: 20px;
+            margin-bottom: 12px;
+            border-bottom: 1px solid var(--primary-color-light);
+            padding-bottom: 8px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 16px;
+        }
+
+        @media (min-width: 480px) {
+            .form-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        .form-group label {
+            display: flex; 
+            align-items: center; 
+            color: var(--text-color);
+            font-size: 0.9em;
+            margin-bottom: 6px;
+            font-weight: 500;
+        }
+
+        .form-group label .material-icons {
+            font-size: 1.2em; 
+            margin-right: 8px; 
+            color: var(--primary-color);
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid var(--primary-color-light);
+            border-radius: 4px;
+            font-size: 1em;
+            box-sizing: border-box;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+        .input-field:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(33, 150, 243, 0.2);
+            outline: none;
+        }
+
+        .result-section {
+            margin-top: 32px;
+            padding: 20px;
+            background-color: #f0f8ff;
+            border-radius: 8px;
+            border: 1px solid var(--primary-color-light);
+        }
+
+        .result-section h2 {
+            color: var(--primary-color-dark);
+            font-size: 1.5em;
+            font-weight: 500;
+            margin-bottom: 16px;
+            text-align: center;
+        }
+
+        .result-item {
+            display: grid;
+            grid-template-columns: auto 1fr; 
+            gap: 10px; 
+            align-items: center;
+            padding: 10px 0; 
+            font-size: 1em;
+        }
+        
+        .result-item:not(:last-child) {
+            border-bottom: 1px solid var(--primary-color-light); 
+        }
+        
+        hr.result-divider { 
+             grid-column: 1 / -1; 
+             border: none;
+             border-top: 2px solid var(--primary-color-light); 
+             margin: 10px 0;
+        }
+
+
+        .result-label {
+            /* display: flex; */ /* Nicht mehr nötig, wenn keine Icons da sind */
+            /* align-items: center; */
+            color: var(--text-color-light);
+            font-weight: 500;
+        }
+
+        /* .result-label .material-icons { */ /* CSS für Icons nicht mehr benötigt */
+            /* font-size: 1.3em; */
+            /* margin-right: 8px; */
+            /* color: var(--primary-color); */
+        /* } */
+
+        .result-value {
+            text-align: right; 
+            color: var(--primary-color-dark);
+            font-weight: 600;
+            font-size: 1.1em;
+        }
+
+        .result-value.result-positive { color: var(--success-color); }
+        .result-value.result-negative { color: var(--error-color); }
+        .result-value.result-neutral { color: var(--primary-color-dark); }
+
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.5);
+        }
+        .modal-content {
+            background-color: var(--card-background-color);
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            width: 90%;
+            max-width: 400px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        .modal-header h2 {
+            margin-top: 0;
+            color: var(--error-color);
+            font-size: 1.25em;
+        }
+        .modal-body p {
+            font-size: 1em;
+            color: var(--text-color-light);
+        }
+        .modal-footer {
+            text-align: right;
+            margin-top: 20px;
+        }
+        .btn-modal-close {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .btn-modal-close:hover {
+            background-color: var(--primary-color-dark);
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container-card">
+        <header>
+            <h1>Arbeitszeitrechner</h1>
+            <p>Berechne deine tägliche Arbeitszeit.</p>
+        </header>
+
+        <form id="arbeitszeitForm">
+            <div class="form-section">
+                <div class="form-group">
+                    <label for="sollzeit">
+                        <span class="material-icons">timer</span>Soll-Arbeitszeit
+                    </label>
+                    <input type="time" id="sollzeit" class="input-field" value="07:30" required>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h2>Vormittag</h2>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="kommen1">
+                            <span class="material-icons">login</span>Kommen
+                        </label>
+                        <input type="time" id="kommen1" class="input-field" value="07:00" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="gehen1">
+                            <span class="material-icons">logout</span>Gehen
+                        </label>
+                        <input type="time" id="gehen1" class="input-field" value="11:30" required>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h2>Nachmittag</h2>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="kommen2">
+                            <span class="material-icons">login</span>Kommen
+                        </label>
+                        <input type="time" id="kommen2" class="input-field" value="12:00" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="gehen2">
+                            <span class="material-icons">logout</span>Gehen
+                        </label>
+                        <input type="time" id="gehen2" class="input-field" value="15:00" required>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+        <div id="ergebnis" class="result-section">
+            <h2>Ergebnis</h2>
+            <div class="result-item">
+                <!-- Icon entfernt -->
+                <span class="result-label">Gearbeitete Zeit</span>
+                <span class="result-value" id="gearbeiteteZeit">--:--</span>
+            </div>
+            <div class="result-item">
+                <!-- Icon entfernt -->
+                <span class="result-label">Pausenzeit</span>
+                <span class="result-value" id="pausenZeit">--:--</span>
+            </div>
+            
+            <hr class="result-divider">
+            
+            <div class="result-item">
+                <!-- Icon entfernt -->
+                <span class="result-label">Soll-Arbeitszeit</span>
+                <span class="result-value" id="sollArbeitszeitDisplay">07:30</span>
+            </div>
+            <div class="result-item">
+                <!-- Icon entfernt -->
+                <span class="result-label">Differenz</span>
+                <span class="result-value" id="differenzZeit">--:--</span>
+            </div>
+             <div class="result-item">
+                <!-- Icon entfernt -->
+                <span class="result-label">Voraussichtliches Arbeitsende</span>
+                <span class="result-value" id="voraussichtlichesEnde">--:--</span>
+            </div>
+        </div>
+    </div>
+
+    <div id="errorModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Fehler</h2>
+            </div>
+            <div class="modal-body">
+                <p id="modalErrorMessage"></p>
+            </div>
+            <div class="modal-footer">
+                <button id="closeModalButton" class="btn-modal-close">Schließen</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const ergebnisDiv = document.getElementById('ergebnis');
+        const gearbeiteteZeitSpan = document.getElementById('gearbeiteteZeit');
+        const pausenZeitSpan = document.getElementById('pausenZeit');
+        const differenzZeitSpan = document.getElementById('differenzZeit');
+        const voraussichtlichesEndeSpan = document.getElementById('voraussichtlichesEnde');
+        const sollArbeitszeitDisplaySpan = document.getElementById('sollArbeitszeitDisplay');
+
+        const sollzeitInput = document.getElementById('sollzeit');
+        const kommen1Input = document.getElementById('kommen1');
+        const gehen1Input = document.getElementById('gehen1');
+        const kommen2Input = document.getElementById('kommen2');
+        const gehen2Input = document.getElementById('gehen2');
+
+        const errorModal = document.getElementById('errorModal');
+        const modalErrorMessage = document.getElementById('modalErrorMessage');
+        const closeModalButton = document.getElementById('closeModalButton');
+
+        function showErrorModal(message) {
+            modalErrorMessage.textContent = message;
+            errorModal.style.display = 'block';
+        }
+
+        closeModalButton.onclick = function() { errorModal.style.display = 'none'; }
+        window.onclick = function(event) {
+            if (event.target == errorModal) {
+                errorModal.style.display = 'none';
+            }
+        }
+
+        function zeitInMinuten(zeitString) {
+            if (!zeitString) return NaN;
+            const parts = zeitString.split(':');
+            if (parts.length !== 2) return NaN;
+            const stunden = parseInt(parts[0], 10);
+            const minuten = parseInt(parts[1], 10);
+            if (isNaN(stunden) || isNaN(minuten) || stunden < 0 || stunden > 23 || minuten < 0 || minuten > 59) return NaN;
+            return stunden * 60 + minuten;
+        }
+
+        function minutenInZeit(minutenGesamt) {
+            if (isNaN(minutenGesamt) || minutenGesamt === null) return "--:--";
+            const negativ = minutenGesamt < 0;
+            let absMinuten = Math.abs(minutenGesamt);
+            const stunden = Math.floor(absMinuten / 60);
+            const minuten = absMinuten % 60;
+            return (negativ ? "-" : "") + String(stunden).padStart(2, '0') + ':' + String(minuten).padStart(2, '0');
+        }
+        
+        const MOUSE_WHEEL_TIME_INCREMENT_MINUTES = 1; 
+
+        function handleTimeInputMouseWheel(event) {
+            event.preventDefault(); 
+            
+            const inputElement = event.target;
+            let currentTimeInMinutes = zeitInMinuten(inputElement.value);
+
+            if (isNaN(currentTimeInMinutes)) { 
+                currentTimeInMinutes = 0; 
+            }
+
+            if (event.deltaY < 0) { 
+                currentTimeInMinutes += MOUSE_WHEEL_TIME_INCREMENT_MINUTES;
+            } else { 
+                currentTimeInMinutes -= MOUSE_WHEEL_TIME_INCREMENT_MINUTES;
+            }
+
+            const totalMinutesInDay = 24 * 60;
+            currentTimeInMinutes = (currentTimeInMinutes % totalMinutesInDay + totalMinutesInDay) % totalMinutesInDay; 
+            
+            inputElement.value = minutenInZeit(currentTimeInMinutes);
+            inputElement.dispatchEvent(new Event('input', { bubbles: true }));
+        }
+
+        function berechneUndZeigeZeiten() {
+            const sollzeitValue = sollzeitInput.value;
+            const kommen1Value = kommen1Input.value;
+            const gehen1Value = gehen1Input.value;
+            const kommen2Value = kommen2Input.value;
+            const gehen2Value = gehen2Input.value;
+
+            const aktuelleSollzeitMinuten = zeitInMinuten(sollzeitValue);
+            const kommen1Min = zeitInMinuten(kommen1Value);
+            const gehen1Min = zeitInMinuten(gehen1Value);
+            const kommen2Min = zeitInMinuten(kommen2Value);
+            const gehen2Min = zeitInMinuten(gehen2Value);
+
+            sollArbeitszeitDisplaySpan.textContent = minutenInZeit(aktuelleSollzeitMinuten);
+            differenzZeitSpan.className = 'result-value'; 
+
+            let voraussichtlichesEndeMin = NaN;
+            if (!isNaN(aktuelleSollzeitMinuten) && !isNaN(kommen1Min) && !isNaN(gehen1Min) && !isNaN(kommen2Min)) {
+                if (gehen1Min > kommen1Min && kommen2Min > gehen1Min) { // Grundlegende Reihenfolge für Pause
+                    const pausenzeitVorlaeufigMin = kommen2Min - gehen1Min;
+                    if (pausenzeitVorlaeufigMin >= 0) {
+                        voraussichtlichesEndeMin = kommen1Min + aktuelleSollzeitMinuten + pausenzeitVorlaeufigMin;
+                    }
+                }
+            }
+            voraussichtlichesEndeSpan.textContent = minutenInZeit(voraussichtlichesEndeMin);
+
+            if (isNaN(aktuelleSollzeitMinuten) || isNaN(kommen1Min) || isNaN(gehen1Min) || isNaN(kommen2Min) || isNaN(gehen2Min)) {
+                gearbeiteteZeitSpan.textContent = "--:--";
+                pausenZeitSpan.textContent = "--:--";
+                differenzZeitSpan.textContent = "--:--";
+                return;
+            }
+
+            // Validierung der Zeitreihenfolge
+            if (gehen1Min <= kommen1Min) {
+                showErrorModal('Die "Gehen"-Zeit am Vormittag muss nach der "Kommen"-Zeit am Vormittag liegen.');
+                gearbeiteteZeitSpan.textContent = "--:--"; pausenZeitSpan.textContent = "--:--"; differenzZeitSpan.textContent = "--:--";
+                return;
+            }
+            if (kommen2Min <= gehen1Min) {
+                showErrorModal('Die "Kommen"-Zeit am Nachmittag muss nach der "Gehen"-Zeit am Vormittag liegen.');
+                 gearbeiteteZeitSpan.textContent = "--:--"; pausenZeitSpan.textContent = "--:--"; differenzZeitSpan.textContent = "--:--";
+                return;
+            }
+            if (gehen2Min <= kommen2Min) {
+                showErrorModal('Die "Gehen"-Zeit am Nachmittag muss nach der "Kommen"-Zeit am Nachmittag liegen.');
+                 gearbeiteteZeitSpan.textContent = "--:--"; pausenZeitSpan.textContent = "--:--"; differenzZeitSpan.textContent = "--:--";
+                return;
+            }
+
+            const arbeitsblock1Min = gehen1Min - kommen1Min;
+            const arbeitsblock2Min = gehen2Min - kommen2Min;
+            const gesamtArbeitszeitMin = arbeitsblock1Min + arbeitsblock2Min;
+            const pausenzeitMin = kommen2Min - gehen1Min;
+            const differenzMin = gesamtArbeitszeitMin - aktuelleSollzeitMinuten;
+
+            gearbeiteteZeitSpan.textContent = minutenInZeit(gesamtArbeitszeitMin);
+            pausenZeitSpan.textContent = minutenInZeit(pausenzeitMin);
+            differenzZeitSpan.textContent = minutenInZeit(differenzMin);
+            
+            if (differenzMin > 0) {
+                differenzZeitSpan.classList.add('result-positive');
+            } else if (differenzMin < 0) {
+                differenzZeitSpan.classList.add('result-negative');
+            } else {
+                differenzZeitSpan.classList.add('result-neutral');
+            }
+        }
+
+        const eingabeFelder = [sollzeitInput, kommen1Input, gehen1Input, kommen2Input, gehen2Input];
+        eingabeFelder.forEach(feld => {
+            feld.addEventListener('input', berechneUndZeigeZeiten);
+            feld.addEventListener('wheel', handleTimeInputMouseWheel, { passive: false }); 
+        });
+
+        berechneUndZeigeZeiten();
+    </script>
+</body>
+</html>
