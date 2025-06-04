@@ -27,9 +27,8 @@
             margin: 0;
             padding: 20px;
             display: flex;
-            flex-direction: column; /* Wichtig für Footer-ähnliche Elemente */
+            flex-direction: column; 
             align-items: center;
-            /* justify-content: center; */ /* Entfernt, um Scrollen zu ermöglichen, wenn Inhalt länger wird */
             min-height: 100vh;
             box-sizing: border-box;
         }
@@ -42,7 +41,7 @@
             width: 100%;
             max-width: 500px;
             box-sizing: border-box;
-            margin-bottom: 30px; /* Abstand zum Footer-Bereich */
+            /* margin-bottom: 30px; */ /* Entfernt, da Footer weg ist */
         }
 
         header h1 {
@@ -213,52 +212,7 @@
             background-color: var(--primary-color-dark);
         }
 
-        /* Stile für den Footer-Bereich (QR-Code und Impressum) */
-        .footer-section {
-            width: 100%;
-            max-width: 500px; /* Gleiche Breite wie die Hauptkarte */
-            text-align: center;
-            padding: 20px;
-            margin-top: 20px; /* Abstand nach oben */
-            background-color: var(--card-background-color); /* Optional: eigener Hintergrund */
-            border-radius: 8px; /* Optional: abgerundete Ecken */
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05); /* Optional: leichter Schatten */
-        }
-
-        .qr-code-container img {
-            max-width: 150px; /* Größe des QR-Codes anpassen */
-            height: auto;
-            margin-bottom: 20px;
-            border: 1px solid var(--border-color); /* Optional: Rahmen um QR-Code */
-            padding: 5px;
-            background-color: white;
-        }
-        .qr-code-container p {
-            font-size: 0.9em;
-            color: var(--text-color-light);
-            margin-bottom: 20px;
-        }
-
-        .impressum-container {
-            font-size: 0.8em;
-            color: var(--text-color-light);
-            line-height: 1.6;
-        }
-        .impressum-container h3 {
-            font-size: 1.1em;
-            color: var(--text-color);
-            margin-bottom: 10px;
-        }
-        .impressum-container p {
-            margin-bottom: 5px;
-        }
-        .impressum-container a {
-            color: var(--primary-color);
-            text-decoration: none;
-        }
-        .impressum-container a:hover {
-            text-decoration: underline;
-        }
+        /* Stile für den Footer-Bereich (QR-Code und Impressum) wurden entfernt */
 
     </style>
 </head>
@@ -344,23 +298,7 @@
         </div>
     </div>
 
-    <!-- Neuer Bereich für QR-Code und Impressum -->
-    <div class="footer-section">
-        <div class="qr-code-container">
-            <p>Unterstütze die Kaffeekasse:</p>
-            <!-- Pfad zum QR-Code angepasst -->
-            <img src="qrcode.png" alt="QR-Code für Kaffeespende"
-                 onerror="this.onerror=null; this.src='https://placehold.co/150x150/e0e0e0/757575?text=Bild+nicht+gefunden';">
-        </div>
-        <div class="impressum-container">
-            <h3>Impressum</h3>
-            <p>Michael Scholz<br>
-            Kleeweg 8<br>
-            22885 Barsbüttel</p>
-            <p>E-Mail: <a href="mailto:mts@murena.io">mts@murena.io</a><br>
-            Telefon: <a href="tel:+491744825558">+49 174 482 5558</a></p>
-        </div>
-    </div>
+    <!-- Footer-Bereich (QR-Code und Impressum) wurde entfernt -->
 
     <div id="errorModal" class="modal">
         <div class="modal-content">
