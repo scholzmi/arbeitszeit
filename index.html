@@ -39,24 +39,61 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), 0 6px 20px rgba(0, 0, 0, 0.1);
             padding: 24px;
             width: 100%;
-            max-width: 500px;
+            max-width: 500px; /* Beibehalten für die Hauptkarte */
             box-sizing: border-box;
+        }
+        
+        /* Anpassungen für den Header */
+        header {
+            display: flex;
+            justify-content: space-between; /* Verteilt Text und QR-Code Bereich */
+            align-items: center; /* Vertikale Zentrierung */
+            margin-bottom: 24px;
+            gap: 20px; /* Abstand zwischen Text und QR-Code */
+        }
+
+        .header-text {
+            flex-grow: 1; /* Erlaubt dem Textbereich, mehr Platz einzunehmen */
         }
 
         header h1 {
             color: var(--primary-color);
-            font-size: 2em;
+            font-size: 1.8em; /* Etwas kleiner, um Platz zu schaffen */
             font-weight: 500;
-            margin-bottom: 8px;
-            text-align: center;
+            margin-bottom: 4px; /* Weniger Abstand zum Untertitel */
+            text-align: left; /* Text linksbündig im Header-Text-Bereich */
         }
 
-        header p {
+        header p.subtitle { /* Spezifische Klasse für den Untertitel */
             color: var(--text-color-light);
-            font-size: 1em;
-            margin-bottom: 24px;
-            text-align: center;
+            font-size: 0.9em; /* Etwas kleiner */
+            margin-bottom: 0;
+            text-align: left; /* Text linksbündig */
         }
+
+        .header-qr {
+            text-align: center;
+            flex-shrink: 0; /* Verhindert, dass der QR-Bereich schrumpft */
+        }
+
+        .header-qr img {
+            width: 80px; /* Kleinere Größe für den Header */
+            height: 80px;
+            display: block;
+            margin: 0 auto 5px auto; /* Zentriert und Abstand nach unten */
+            border: 1px solid var(--border-color);
+            padding: 3px;
+            background-color: white;
+        }
+        .header-qr a.paypal-link {
+            font-size: 0.75em;
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+        .header-qr a.paypal-link:hover {
+            text-decoration: underline;
+        }
+
 
         .form-section h2 {
             color: var(--primary-color-dark);
@@ -95,7 +132,7 @@
             color: var(--primary-color);
         }
 
-        .input-field, .select-field { /* .select-field für die Combobox hinzugefügt */
+        .input-field, .select-field {
             width: 100%;
             padding: 10px;
             border: 1px solid var(--primary-color-light);
@@ -103,7 +140,7 @@
             font-size: 1em;
             box-sizing: border-box;
             transition: border-color 0.3s, box-shadow 0.3s;
-            background-color: white; /* Wichtig für select auf manchen Systemen */
+            background-color: white; 
         }
 
         .input-field:focus, .select-field:focus {
@@ -216,8 +253,17 @@
 <body>
     <div class="container-card">
         <header>
-            <h1>Arbeitszeitrechner</h1>
-            <p>Berechne deine tägliche Arbeitszeit.</p>
+            <div class="header-text">
+                <h1>Arbeitszeitrechner</h1>
+                <p class="subtitle">Berechne deine tägliche Arbeitszeit.</p>
+            </div>
+            <div class="header-qr">
+                <a href="https://paypal.me/mischolz" target="_blank" title="Kaffeespende via PayPal">
+                    <img src="qrcode.png" alt="QR-Code Kaffeespende"
+                         onerror="this.onerror=null; this.src='https://placehold.co/80x80/e0e0e0/757575?text=QR';">
+                </a>
+                <a href="https://paypal.me/mischolz" target="_blank" class="paypal-link">PayPal Spende</a>
+            </div>
         </header>
 
         <form id="arbeitszeitForm">
@@ -226,7 +272,6 @@
                     <label for="sollzeit">
                         <span class="material-icons">timer</span>Soll-Arbeitszeit
                     </label>
-                    <!-- Ersetzt durch select Element -->
                     <select id="sollzeit" class="select-field" required>
                         <option value="07:00">07:00</option>
                         <option value="07:30" selected>07:30</option>
@@ -323,7 +368,7 @@
         const voraussichtlichesEndeSpan = document.getElementById('voraussichtlichesEnde');
         const sollArbeitszeitDisplaySpan = document.getElementById('sollArbeitszeitDisplay');
 
-        const sollzeitInput = document.getElementById('sollzeit'); // Ist jetzt ein select-Element
+        const sollzeitInput = document.getElementById('sollzeit'); 
         const kommen1Input = document.getElementById('kommen1');
         const gehen1Input = document.getElementById('gehen1');
         const kommen2Input = document.getElementById('kommen2');
@@ -370,8 +415,6 @@
             event.preventDefault(); 
             
             const inputElement = event.target;
-            // Diese Funktion ist für type="time", nicht für select.
-            // Für select würde man keine Mausrad-Interaktion auf diese Weise erwarten.
             if (inputElement.type !== 'time') return; 
 
             let currentTimeInMinutes = zeitInMinuten(inputElement.value);
@@ -394,7 +437,7 @@
         }
 
         function berechneUndZeigeZeiten() {
-            const sollzeitValue = sollzeitInput.value; // Wert aus dem select-Element
+            const sollzeitValue = sollzeitInput.value; 
             const kommen1Value = kommen1Input.value;
             const gehen1Value = gehen1Input.value;
             const kommen2Value = kommen2Input.value;
@@ -472,9 +515,7 @@
             }
         }
 
-        // Event Listener für die Eingabefelder
-        // Die Mausrad-Funktion wird nur noch an die type="time" Felder gebunden.
-        sollzeitInput.addEventListener('input', berechneUndZeigeZeiten); // Standard 'input' für select
+        sollzeitInput.addEventListener('input', berechneUndZeigeZeiten); 
 
         const timeInputFields = [kommen1Input, gehen1Input, kommen2Input, gehen2Input];
         timeInputFields.forEach(feld => {
@@ -482,7 +523,6 @@
             feld.addEventListener('wheel', handleTimeInputMouseWheel, { passive: false }); 
         });
         
-        // Initial einmal aufrufen, um die Anzeige zu initialisieren
         berechneUndZeigeZeiten();
     </script>
 </body>
