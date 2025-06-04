@@ -41,7 +41,6 @@
             width: 100%;
             max-width: 500px;
             box-sizing: border-box;
-            /* margin-bottom: 30px; */ /* Entfernt, da Footer weg ist */
         }
 
         header h1 {
@@ -96,7 +95,7 @@
             color: var(--primary-color);
         }
 
-        .input-field {
+        .input-field, .select-field { /* .select-field für die Combobox hinzugefügt */
             width: 100%;
             padding: 10px;
             border: 1px solid var(--primary-color-light);
@@ -104,9 +103,10 @@
             font-size: 1em;
             box-sizing: border-box;
             transition: border-color 0.3s, box-shadow 0.3s;
+            background-color: white; /* Wichtig für select auf manchen Systemen */
         }
 
-        .input-field:focus {
+        .input-field:focus, .select-field:focus {
             border-color: var(--primary-color);
             box-shadow: 0 0 0 2px rgba(33, 150, 243, 0.2);
             outline: none;
@@ -211,9 +211,6 @@
         .btn-modal-close:hover {
             background-color: var(--primary-color-dark);
         }
-
-        /* Stile für den Footer-Bereich (QR-Code und Impressum) wurden entfernt */
-
     </style>
 </head>
 <body>
@@ -229,7 +226,13 @@
                     <label for="sollzeit">
                         <span class="material-icons">timer</span>Soll-Arbeitszeit
                     </label>
-                    <input type="time" id="sollzeit" class="input-field" value="07:30" required>
+                    <!-- Ersetzt durch select Element -->
+                    <select id="sollzeit" class="select-field" required>
+                        <option value="07:00">07:00</option>
+                        <option value="07:30" selected>07:30</option>
+                        <option value="07:48">07:48</option>
+                        <option value="08:00">08:00</option>
+                    </select>
                 </div>
             </div>
 
@@ -298,8 +301,6 @@
         </div>
     </div>
 
-    <!-- Footer-Bereich (QR-Code und Impressum) wurde entfernt -->
-
     <div id="errorModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
@@ -322,7 +323,7 @@
         const voraussichtlichesEndeSpan = document.getElementById('voraussichtlichesEnde');
         const sollArbeitszeitDisplaySpan = document.getElementById('sollArbeitszeitDisplay');
 
-        const sollzeitInput = document.getElementById('sollzeit');
+        const sollzeitInput = document.getElementById('sollzeit'); // Ist jetzt ein select-Element
         const kommen1Input = document.getElementById('kommen1');
         const gehen1Input = document.getElementById('gehen1');
         const kommen2Input = document.getElementById('kommen2');
@@ -369,6 +370,10 @@
             event.preventDefault(); 
             
             const inputElement = event.target;
+            // Diese Funktion ist für type="time", nicht für select.
+            // Für select würde man keine Mausrad-Interaktion auf diese Weise erwarten.
+            if (inputElement.type !== 'time') return; 
+
             let currentTimeInMinutes = zeitInMinuten(inputElement.value);
 
             if (isNaN(currentTimeInMinutes)) { 
@@ -389,7 +394,7 @@
         }
 
         function berechneUndZeigeZeiten() {
-            const sollzeitValue = sollzeitInput.value;
+            const sollzeitValue = sollzeitInput.value; // Wert aus dem select-Element
             const kommen1Value = kommen1Input.value;
             const gehen1Value = gehen1Input.value;
             const kommen2Value = kommen2Input.value;
@@ -404,48 +409,58 @@
             sollArbeitszeitDisplaySpan.textContent = minutenInZeit(aktuelleSollzeitMinuten);
             differenzZeitSpan.className = 'result-value'; 
 
+            let tatsaechlichePausenzeitMin = NaN;
+            if (!isNaN(kommen2Min) && !isNaN(gehen1Min) && kommen2Min >= gehen1Min) {
+                tatsaechlichePausenzeitMin = kommen2Min - gehen1Min;
+            }
+            
+            let anzuzeigendeUndAnzurechnendePausenzeitMin = tatsaechlichePausenzeitMin;
+            if (tatsaechlichePausenzeitMin >= 0 && tatsaechlichePausenzeitMin < 30) {
+                anzuzeigendeUndAnzurechnendePausenzeitMin = 30;
+            }
+            
+            pausenZeitSpan.textContent = minutenInZeit(anzuzeigendeUndAnzurechnendePausenzeitMin);
+
             let voraussichtlichesEndeMin = NaN;
-            if (!isNaN(aktuelleSollzeitMinuten) && !isNaN(kommen1Min) && !isNaN(gehen1Min) && !isNaN(kommen2Min)) {
-                if (gehen1Min > kommen1Min && kommen2Min > gehen1Min) { 
-                    const pausenzeitVorlaeufigMin = kommen2Min - gehen1Min;
-                    if (pausenzeitVorlaeufigMin >= 0) {
-                        voraussichtlichesEndeMin = kommen1Min + aktuelleSollzeitMinuten + pausenzeitVorlaeufigMin;
-                    }
+            if (!isNaN(aktuelleSollzeitMinuten) && !isNaN(kommen1Min) && 
+                !isNaN(anzuzeigendeUndAnzurechnendePausenzeitMin) && anzuzeigendeUndAnzurechnendePausenzeitMin >= 0) {
+                if (!isNaN(gehen1Min) && kommen1Min < gehen1Min && !isNaN(kommen2Min) && gehen1Min <= kommen2Min) {
+                     voraussichtlichesEndeMin = kommen1Min + aktuelleSollzeitMinuten + anzuzeigendeUndAnzurechnendePausenzeitMin;
                 }
             }
             voraussichtlichesEndeSpan.textContent = minutenInZeit(voraussichtlichesEndeMin);
 
             if (isNaN(aktuelleSollzeitMinuten) || isNaN(kommen1Min) || isNaN(gehen1Min) || isNaN(kommen2Min) || isNaN(gehen2Min)) {
                 gearbeiteteZeitSpan.textContent = "--:--";
-                pausenZeitSpan.textContent = "--:--";
                 differenzZeitSpan.textContent = "--:--";
                 return;
             }
 
             if (gehen1Min <= kommen1Min) {
                 showErrorModal('Die "Gehen"-Zeit am Vormittag muss nach der "Kommen"-Zeit am Vormittag liegen.');
-                gearbeiteteZeitSpan.textContent = "--:--"; pausenZeitSpan.textContent = "--:--"; differenzZeitSpan.textContent = "--:--";
+                gearbeiteteZeitSpan.textContent = "--:--"; 
+                differenzZeitSpan.textContent = "--:--";
                 return;
             }
-            if (kommen2Min <= gehen1Min) {
-                showErrorModal('Die "Kommen"-Zeit am Nachmittag muss nach der "Gehen"-Zeit am Vormittag liegen.');
-                 gearbeiteteZeitSpan.textContent = "--:--"; pausenZeitSpan.textContent = "--:--"; differenzZeitSpan.textContent = "--:--";
+            if (kommen2Min < gehen1Min) { 
+                showErrorModal('Die "Kommen"-Zeit am Nachmittag muss vor oder gleich der "Gehen"-Zeit am Vormittag liegen.');
+                 gearbeiteteZeitSpan.textContent = "--:--"; 
+                 differenzZeitSpan.textContent = "--:--";
                 return;
             }
             if (gehen2Min <= kommen2Min) {
                 showErrorModal('Die "Gehen"-Zeit am Nachmittag muss nach der "Kommen"-Zeit am Nachmittag liegen.');
-                 gearbeiteteZeitSpan.textContent = "--:--"; pausenZeitSpan.textContent = "--:--"; differenzZeitSpan.textContent = "--:--";
+                 gearbeiteteZeitSpan.textContent = "--:--"; 
+                 differenzZeitSpan.textContent = "--:--";
                 return;
             }
 
             const arbeitsblock1Min = gehen1Min - kommen1Min;
             const arbeitsblock2Min = gehen2Min - kommen2Min;
             const gesamtArbeitszeitMin = arbeitsblock1Min + arbeitsblock2Min;
-            const pausenzeitMin = kommen2Min - gehen1Min;
             const differenzMin = gesamtArbeitszeitMin - aktuelleSollzeitMinuten;
 
             gearbeiteteZeitSpan.textContent = minutenInZeit(gesamtArbeitszeitMin);
-            pausenZeitSpan.textContent = minutenInZeit(pausenzeitMin);
             differenzZeitSpan.textContent = minutenInZeit(differenzMin);
             
             if (differenzMin > 0) {
@@ -457,12 +472,17 @@
             }
         }
 
-        const eingabeFelder = [sollzeitInput, kommen1Input, gehen1Input, kommen2Input, gehen2Input];
-        eingabeFelder.forEach(feld => {
+        // Event Listener für die Eingabefelder
+        // Die Mausrad-Funktion wird nur noch an die type="time" Felder gebunden.
+        sollzeitInput.addEventListener('input', berechneUndZeigeZeiten); // Standard 'input' für select
+
+        const timeInputFields = [kommen1Input, gehen1Input, kommen2Input, gehen2Input];
+        timeInputFields.forEach(feld => {
             feld.addEventListener('input', berechneUndZeigeZeiten);
             feld.addEventListener('wheel', handleTimeInputMouseWheel, { passive: false }); 
         });
-
+        
+        // Initial einmal aufrufen, um die Anzeige zu initialisieren
         berechneUndZeigeZeiten();
     </script>
 </body>
