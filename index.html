@@ -21,20 +21,16 @@
             --font-family: 'Roboto', sans-serif;
         }
 
-        html, body { 
-            height: 100%;
-            margin: 0;
-        }
-
         body {
             font-family: var(--font-family);
             background-color: var(--background-color);
+            margin: 0;
             padding: 20px;
             display: flex;
             flex-direction: column; 
             align-items: center;
+            min-height: 100vh; /* Stellt sicher, dass der Body mindestens die volle Viewport-Höhe hat */
             box-sizing: border-box;
-            position: relative; 
         }
 
         .container-card {
@@ -45,7 +41,7 @@
             width: 100%;
             max-width: 500px; 
             box-sizing: border-box;
-            margin-bottom: 50px; 
+            margin-bottom: 20px; /* Abstand zum zentrierten Impressum */
         }
         
         header {
@@ -53,7 +49,7 @@
             justify-content: space-between; 
             align-items: center; 
             margin-bottom: 24px;
-            gap: 20px; 
+            gap: 15px; /* Etwas weniger Gap für kleinere Bildschirme */
         }
 
         .header-text {
@@ -62,7 +58,7 @@
 
         header h1 {
             color: var(--primary-color);
-            font-size: 1.8em; 
+            font-size: 1.7em; /* Angepasst für bessere Responsivität */
             font-weight: 500;
             margin-bottom: 4px; 
             text-align: left; 
@@ -70,7 +66,7 @@
 
         header p.subtitle { 
             color: var(--text-color-light);
-            font-size: 0.9em; 
+            font-size: 0.85em; /* Angepasst */
             margin-bottom: 0;
             text-align: left; 
         }
@@ -81,8 +77,8 @@
         }
 
         .header-qr img {
-            width: 80px; 
-            height: 80px;
+            width: 70px; /* Angepasst */
+            height: 70px; /* Angepasst */
             display: block;
             margin: 0 auto 5px auto; 
             border: 1px solid var(--border-color);
@@ -90,12 +86,29 @@
             background-color: white;
         }
         .header-qr a.paypal-link {
-            font-size: 0.75em;
+            font-size: 0.7em; /* Angepasst */
             color: var(--primary-color);
             text-decoration: none;
+            display: block; /* Stellt sicher, dass der Link unter dem Bild steht */
         }
         .header-qr a.paypal-link:hover {
             text-decoration: underline;
+        }
+
+        /* Responsive Anpassung für den Header auf kleinen Bildschirmen */
+        @media (max-width: 480px) {
+            header {
+                flex-direction: column; /* Elemente untereinander anordnen */
+                align-items: center; /* Zentriert die Elemente horizontal */
+                text-align: center; /* Zentriert den Text im Header-Text-Bereich */
+                gap: 15px;
+            }
+            header h1, header p.subtitle {
+                text-align: center; /* Text zentrieren */
+            }
+            .header-qr {
+                margin-top: 10px; /* Kleiner Abstand nach oben für den QR-Bereich */
+            }
         }
 
 
@@ -115,7 +128,7 @@
             gap: 16px;
         }
 
-        @media (min-width: 480px) {
+        @media (min-width: 480px) { /* Behält das zweispaltige Layout für breitere Bildschirme bei */
             .form-grid {
                 grid-template-columns: 1fr 1fr;
             }
@@ -253,21 +266,22 @@
             background-color: var(--primary-color-dark);
         }
 
+        /* Angepasstes Impressum: zentriert unter der Karte */
         .footer-imprint {
-            position: fixed; 
-            bottom: 10px;    
-            right: 10px;     
-            font-size: 0.7em; 
-            color: #aaa;      
+            width: 100%;
+            max-width: 500px; /* Passt zur Breite der Karte */
+            margin: 30px auto 20px auto; /* Zentriert horizontal, mit vertikalem Abstand */
+            text-align: center;
+            font-size: 0.75em; 
+            color: #888;      
             text-transform: lowercase; 
-            z-index: 100;      
         }
         .footer-imprint a {
-            color: #aaa;      
+            color: #888;      
             text-decoration: none;
         }
         .footer-imprint a:hover {
-            color: #777;      
+            color: #555;      
             text-decoration: underline;
         }
 
@@ -283,7 +297,7 @@
             <div class="header-qr">
                 <a href="https://paypal.me/mischolz" target="_blank" title="Kaffeespende via PayPal">
                     <img src="qrcode.png" alt="QR-Code Kaffeespende"
-                         onerror="this.onerror=null; this.src='https://placehold.co/80x80/e0e0e0/757575?text=QR';">
+                         onerror="this.onerror=null; this.src='https://placehold.co/70x70/e0e0e0/757575?text=QR';">
                 </a>
                 <a href="https://paypal.me/mischolz" target="_blank" class="paypal-link">PayPal Spende</a>
             </div>
@@ -363,7 +377,8 @@
                 <span class="result-value" id="differenzZeit">--:--</span>
             </div>
              <div class="result-item">
-                <span class="result-label">Voraussichtliches Arbeitsende</span>
+                <!-- Text geändert -->
+                <span class="result-label">Frühestes Arbeitszeitende</span>
                 <span class="result-value" id="voraussichtlichesEnde">--:--</span>
             </div>
         </div>
@@ -383,6 +398,7 @@
         </div>
     </div>
 
+    <!-- Impressum zentriert unter der Karte -->
     <div class="footer-imprint">
         michael scholz, kleeweg 8, 22885 barsbüttel | <a href="mailto:mts@murena.io">mts@murena.io</a> | <a href="tel:+491744825558">+49 174 482 5558</a>
     </div>
@@ -477,22 +493,19 @@
             const gehen2Min = zeitInMinuten(gehen2Value);
 
             sollArbeitszeitDisplaySpan.textContent = minutenInZeit(aktuelleSollzeitMinuten);
-            differenzZeitSpan.className = 'result-value'; // Reset class
+            differenzZeitSpan.className = 'result-value'; 
 
-            // 1. Tatsächliche Pause berechnen
             let tatsaechlichePausenzeitMin = NaN;
-            if (!isNaN(kommen2Min) && !isNaN(gehen1Min) && kommen2Min >= gehen1Min) { // Erlaube 0 Min Pause
+            if (!isNaN(kommen2Min) && !isNaN(gehen1Min) && kommen2Min >= gehen1Min) {
                 tatsaechlichePausenzeitMin = kommen2Min - gehen1Min;
             }
             
-            // 2. Pause bestimmen, die für Anzeige und vorauss. Ende genutzt wird
             let fuerAnzeigeUndVoraussEndeGenutztePausenzeitMin = tatsaechlichePausenzeitMin;
             if (tatsaechlichePausenzeitMin >= 0 && tatsaechlichePausenzeitMin < 30) {
                 fuerAnzeigeUndVoraussEndeGenutztePausenzeitMin = 30;
             }
             pausenZeitSpan.textContent = minutenInZeit(fuerAnzeigeUndVoraussEndeGenutztePausenzeitMin);
 
-            // 3. Voraussichtliches Arbeitsende berechnen
             let voraussichtlichesEndeMin = NaN;
             if (!isNaN(aktuelleSollzeitMinuten) && !isNaN(kommen1Min) && 
                 !isNaN(fuerAnzeigeUndVoraussEndeGenutztePausenzeitMin) && fuerAnzeigeUndVoraussEndeGenutztePausenzeitMin >= 0) {
@@ -502,11 +515,9 @@
             }
             voraussichtlichesEndeSpan.textContent = minutenInZeit(voraussichtlichesEndeMin);
 
-            // Reset für gearbeitete Zeit und Differenz, bevor Validierungen ggf. returnen
             gearbeiteteZeitSpan.textContent = "--:--";
             differenzZeitSpan.textContent = "--:--";
 
-            // 4. Validierung der Eingaben für die Hauptberechnung
             if (isNaN(aktuelleSollzeitMinuten) || isNaN(kommen1Min) || isNaN(gehen1Min) || isNaN(kommen2Min) || isNaN(gehen2Min)) {
                 return; 
             }
@@ -523,26 +534,22 @@
                 return;
             }
 
-            // 5. Tatsächliche Arbeitsblöcke und initiale Gesamt-Arbeitszeit
             const arbeitsblock1Min = gehen1Min - kommen1Min;
             const arbeitsblock2Min = gehen2Min - kommen2Min;
             let gesamtArbeitszeitMin = arbeitsblock1Min + arbeitsblock2Min;
 
-            // 6. Korrektur der gearbeiteten Zeit aufgrund der Mindestpause von 30 Minuten
             if (tatsaechlichePausenzeitMin >= 0 && tatsaechlichePausenzeitMin < 30) {
                 const pausenDefizit = 30 - tatsaechlichePausenzeitMin;
                 gesamtArbeitszeitMin -= pausenDefizit;
                 gesamtArbeitszeitMin = Math.max(0, gesamtArbeitszeitMin); 
             }
             
-            // 7. Differenz berechnen
             const differenzMin = gesamtArbeitszeitMin - aktuelleSollzeitMinuten;
 
-            // 8. Ergebnisse anzeigen
             gearbeiteteZeitSpan.textContent = minutenInZeit(gesamtArbeitszeitMin);
             differenzZeitSpan.textContent = minutenInZeit(differenzMin);
             
-            differenzZeitSpan.className = 'result-value'; // Reset
+            differenzZeitSpan.className = 'result-value'; 
             if (differenzMin > 0) {
                 differenzZeitSpan.classList.add('result-positive');
             } else if (differenzMin < 0) {
