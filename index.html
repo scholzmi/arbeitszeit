@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Feierabendrechner</title> <!-- Titel der Seite geändert -->
+    <title>Feierabendrechner</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <style>
@@ -41,14 +41,14 @@
             width: 100%;
             max-width: 500px; 
             box-sizing: border-box;
-            margin-bottom: 20px; 
+            margin-bottom: 15px; /* Abstand zum Impressum reduziert */
         }
         
         header {
             display: flex;
             justify-content: space-between; 
             align-items: center; 
-            margin-bottom: 24px;
+            margin-bottom: 16px; /* Abstand zur Sollzeit reduziert */
             gap: 15px; 
         }
 
@@ -69,8 +69,8 @@
         }
 
         .header-qr img {
-            width: 80px; /* QR-Code Größe leicht erhöht */
-            height: 80px; /* QR-Code Größe leicht erhöht */
+            width: 80px; 
+            height: 80px; 
             display: block;
             margin: 0 auto 5px auto; 
             border: 1px solid var(--border-color);
@@ -259,9 +259,9 @@
         .footer-imprint {
             width: 100%;
             max-width: 500px; 
-            margin: 30px auto 20px auto; 
+            margin: 15px auto 20px auto; /* Oberer Abstand zum Impressum reduziert */
             text-align: center;
-            font-size: 0.8em; /* Impressum Schriftgröße leicht erhöht */
+            font-size: 0.8em; 
             color: #888;      
             text-transform: lowercase; 
         }
@@ -280,12 +280,12 @@
     <div class="container-card">
         <header>
             <div class="header-text">
-                <h1>Feierabendrechner</h1> <!-- Titel geändert -->
+                <h1>Feierabendrechner</h1>
             </div>
             <div class="header-qr">
                 <a href="https://paypal.me/mischolz" target="_blank" title="Kaffeespende via PayPal">
                     <img src="qrcode.png" alt="QR-Code Kaffeespende"
-                         onerror="this.onerror=null; this.src='https://placehold.co/80x80/e0e0e0/757575?text=QR';"> <!-- Placeholder Größe angepasst -->
+                         onerror="this.onerror=null; this.src='https://placehold.co/80x80/e0e0e0/757575?text=QR';">
                 </a>
                 <a href="https://paypal.me/mischolz" target="_blank" class="paypal-link">PayPal Spende</a>
             </div>
@@ -374,7 +374,7 @@
     </div>
 
     <div class="footer-imprint">
-        michael scholz, kleeweg 8, 22885 barsbüttel | <a href="mailto:scholzm@me.com">scholzm@me.com</a> | <a href="tel:+491744825558">+49 174 482 5558</a> <!-- E-Mail geändert -->
+        michael scholz, kleeweg 8, 22885 barsbüttel | <a href="mailto:scholzm@me.com">scholzm@me.com</a> | <a href="tel:+491744825558">+49 174 482 5558</a>
     </div>
 
     <script>
