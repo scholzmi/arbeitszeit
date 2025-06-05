@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Arbeitszeitrechner</title>
+    <title>Feierabendrechner</title> <!-- Titel der Seite geändert -->
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <style>
@@ -60,11 +60,8 @@
             color: var(--primary-color);
             font-size: 1.7em; 
             font-weight: 500;
-            /* margin-bottom: 4px; */ /* Entfernt, da Untertitel weg ist */
             text-align: left; 
         }
-
-        /* header p.subtitle wurde entfernt */
 
         .header-qr {
             text-align: center;
@@ -72,8 +69,8 @@
         }
 
         .header-qr img {
-            width: 70px; 
-            height: 70px; 
+            width: 80px; /* QR-Code Größe leicht erhöht */
+            height: 80px; /* QR-Code Größe leicht erhöht */
             display: block;
             margin: 0 auto 5px auto; 
             border: 1px solid var(--border-color);
@@ -97,7 +94,7 @@
                 text-align: center; 
                 gap: 15px;
             }
-            header h1 { /* Nur noch h1 im Header-Text */
+            header h1 {
                 text-align: center; 
             }
             .header-qr {
@@ -143,7 +140,7 @@
             color: var(--primary-color);
         }
 
-        .input-field { /* .select-field wurde entfernt, da Sollzeit wieder input ist */
+        .input-field {
             width: 100%;
             padding: 10px;
             border: 1px solid var(--primary-color-light);
@@ -161,14 +158,12 @@
         }
 
         .result-section {
-            margin-top: 20px; /* Reduziert für weniger Abstand nach oben */
+            margin-top: 20px; 
             padding: 20px;
             background-color: #f0f8ff;
             border-radius: 8px;
             border: 1px solid var(--primary-color-light);
         }
-
-        /* .result-section h2 wurde entfernt */
 
         .result-item {
             display: grid;
@@ -266,7 +261,7 @@
             max-width: 500px; 
             margin: 30px auto 20px auto; 
             text-align: center;
-            font-size: 0.75em; 
+            font-size: 0.8em; /* Impressum Schriftgröße leicht erhöht */
             color: #888;      
             text-transform: lowercase; 
         }
@@ -285,13 +280,12 @@
     <div class="container-card">
         <header>
             <div class="header-text">
-                <h1>Arbeitszeitrechner</h1>
-                <!-- <p class="subtitle">Berechne deine tägliche Arbeitszeit.</p> --> <!-- Untertitel entfernt -->
+                <h1>Feierabendrechner</h1> <!-- Titel geändert -->
             </div>
             <div class="header-qr">
                 <a href="https://paypal.me/mischolz" target="_blank" title="Kaffeespende via PayPal">
                     <img src="qrcode.png" alt="QR-Code Kaffeespende"
-                         onerror="this.onerror=null; this.src='https://placehold.co/70x70/e0e0e0/757575?text=QR';">
+                         onerror="this.onerror=null; this.src='https://placehold.co/80x80/e0e0e0/757575?text=QR';"> <!-- Placeholder Größe angepasst -->
                 </a>
                 <a href="https://paypal.me/mischolz" target="_blank" class="paypal-link">PayPal Spende</a>
             </div>
@@ -345,7 +339,6 @@
         </form>
 
         <div id="ergebnis" class="result-section">
-            <!-- <h2>Ergebnis</h2> --> <!-- Überschrift Ergebnis entfernt -->
             <div class="result-item">
                 <span class="result-label">Gearbeitete Zeit</span>
                 <span class="result-value" id="gearbeiteteZeit">--:--</span>
@@ -381,7 +374,7 @@
     </div>
 
     <div class="footer-imprint">
-        michael scholz, kleeweg 8, 22885 barsbüttel | <a href="mailto:mts@murena.io">mts@murena.io</a> | <a href="tel:+491744825558">+49 174 482 5558</a>
+        michael scholz, kleeweg 8, 22885 barsbüttel | <a href="mailto:scholzm@me.com">scholzm@me.com</a> | <a href="tel:+491744825558">+49 174 482 5558</a> <!-- E-Mail geändert -->
     </div>
 
     <script>
