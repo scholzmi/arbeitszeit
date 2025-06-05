@@ -60,16 +60,11 @@
             color: var(--primary-color);
             font-size: 1.7em; 
             font-weight: 500;
-            margin-bottom: 4px; 
+            /* margin-bottom: 4px; */ /* Entfernt, da Untertitel weg ist */
             text-align: left; 
         }
 
-        header p.subtitle { 
-            color: var(--text-color-light);
-            font-size: 0.85em; 
-            margin-bottom: 0;
-            text-align: left; 
-        }
+        /* header p.subtitle wurde entfernt */
 
         .header-qr {
             text-align: center;
@@ -102,7 +97,7 @@
                 text-align: center; 
                 gap: 15px;
             }
-            header h1, header p.subtitle {
+            header h1 { /* Nur noch h1 im Header-Text */
                 text-align: center; 
             }
             .header-qr {
@@ -148,7 +143,7 @@
             color: var(--primary-color);
         }
 
-        .input-field, .select-field { /* select-field wird nicht mehr direkt verwendet, aber Stil bleibt für Konsistenz */
+        .input-field { /* .select-field wurde entfernt, da Sollzeit wieder input ist */
             width: 100%;
             padding: 10px;
             border: 1px solid var(--primary-color-light);
@@ -159,27 +154,21 @@
             background-color: white; 
         }
 
-        .input-field:focus, .select-field:focus {
+        .input-field:focus {
             border-color: var(--primary-color);
             box-shadow: 0 0 0 2px rgba(33, 150, 243, 0.2);
             outline: none;
         }
 
         .result-section {
-            margin-top: 32px;
+            margin-top: 20px; /* Reduziert für weniger Abstand nach oben */
             padding: 20px;
             background-color: #f0f8ff;
             border-radius: 8px;
             border: 1px solid var(--primary-color-light);
         }
 
-        .result-section h2 {
-            color: var(--primary-color-dark);
-            font-size: 1.5em;
-            font-weight: 500;
-            margin-bottom: 16px;
-            text-align: center;
-        }
+        /* .result-section h2 wurde entfernt */
 
         .result-item {
             display: grid;
@@ -194,19 +183,11 @@
             border-bottom: 1px solid var(--primary-color-light); 
         }
         
-        /* Entfernt, da die dicke Linie nicht mehr gewünscht ist */
-        /* hr.result-divider { 
-             grid-column: 1 / -1; 
-             border: none;
-             border-top: 2px solid var(--primary-color-light); 
-             margin: 10px 0;
-        } */
-
         .result-label {
             color: var(--text-color-light);
             font-weight: 500;
         }
-        .result-label.feierabend-label { /* Für Fettdruck */
+        .result-label.feierabend-label { 
             font-weight: 700;
         }
 
@@ -221,15 +202,14 @@
         .result-value.result-negative { color: var(--error-color); }
         .result-value.result-neutral { color: var(--primary-color-dark); }
 
-        /* Blink-Animation */
         @keyframes blink-animation {
             0% { background-color: transparent; }
-            50% { background-color: rgba(76, 175, 80, 0.2); } /* Helles Grün, passend zu --success-color */
+            50% { background-color: rgba(76, 175, 80, 0.2); } 
             100% { background-color: transparent; }
         }
         .blink-feierabend {
             animation: blink-animation 1s infinite;
-            border-radius: 4px; /* Abrundung für den blinkenden Hintergrund */
+            border-radius: 4px; 
         }
 
 
@@ -306,7 +286,7 @@
         <header>
             <div class="header-text">
                 <h1>Arbeitszeitrechner</h1>
-                <p class="subtitle">Berechne deine tägliche Arbeitszeit.</p>
+                <!-- <p class="subtitle">Berechne deine tägliche Arbeitszeit.</p> --> <!-- Untertitel entfernt -->
             </div>
             <div class="header-qr">
                 <a href="https://paypal.me/mischolz" target="_blank" title="Kaffeespende via PayPal">
@@ -323,7 +303,6 @@
                     <label for="sollzeit">
                         <span class="material-icons">timer</span>Soll-Arbeitszeit
                     </label>
-                    <!-- Wieder zu input type="time" geändert -->
                     <input type="time" id="sollzeit" class="input-field" value="07:30" required>
                 </div>
             </div>
@@ -366,7 +345,7 @@
         </form>
 
         <div id="ergebnis" class="result-section">
-            <h2>Ergebnis</h2>
+            <!-- <h2>Ergebnis</h2> --> <!-- Überschrift Ergebnis entfernt -->
             <div class="result-item">
                 <span class="result-label">Gearbeitete Zeit</span>
                 <span class="result-value" id="gearbeiteteZeit">--:--</span>
@@ -376,14 +355,12 @@
                 <span class="result-value" id="pausenZeit">--:--</span>
             </div>
             
-            <!-- <hr class="result-divider"> Diese Linie wurde entfernt -->
-
             <div class="result-item">
                 <span class="result-label">Differenz</span>
                 <span class="result-value" id="differenzZeit">--:--</span>
             </div>
-             <div class="result-item" id="feierabendZeile"> <!-- ID für Blinken hinzugefügt -->
-                <span class="result-label feierabend-label">Feierabend möglich ab</span> <!-- Klasse für Fettdruck -->
+             <div class="result-item" id="feierabendZeile"> 
+                <span class="result-label feierabend-label">Feierabend möglich ab</span> 
                 <span class="result-value" id="voraussichtlichesEnde">--:--</span>
             </div>
         </div>
@@ -412,7 +389,7 @@
         const pausenZeitSpan = document.getElementById('pausenZeit');
         const differenzZeitSpan = document.getElementById('differenzZeit');
         const voraussichtlichesEndeSpan = document.getElementById('voraussichtlichesEnde');
-        const feierabendZeile = document.getElementById('feierabendZeile'); // Element für Blinken
+        const feierabendZeile = document.getElementById('feierabendZeile'); 
 
         const sollzeitInput = document.getElementById('sollzeit'); 
         const kommen1Input = document.getElementById('kommen1');
@@ -424,7 +401,7 @@
         const modalErrorMessage = document.getElementById('modalErrorMessage');
         const closeModalButton = document.getElementById('closeModalButton');
 
-        let blinkInterval = null; // Variable für das Blink-Intervall
+        let blinkInterval = null; 
 
         function showErrorModal(message) {
             modalErrorMessage.textContent = message;
@@ -463,7 +440,6 @@
             event.preventDefault(); 
             
             const inputElement = event.target;
-            // Gilt jetzt für alle input type="time" Felder
             if (inputElement.type !== 'time') return; 
 
             let currentTimeInMinutes = zeitInMinuten(inputElement.value);
@@ -507,21 +483,19 @@
                     feierabendZeile.classList.add('blink-feierabend');
                 } else {
                     feierabendZeile.classList.remove('blink-feierabend');
-                    if (blinkInterval) { // Stoppe Intervall, wenn Feierabendzeit noch nicht erreicht
+                    if (blinkInterval) { 
                         clearInterval(blinkInterval);
                         blinkInterval = null;
                     }
                 }
             }
             
-            updateBlinkState(); // Einmal sofort ausführen
-            // Starte Intervall nur, wenn Blinken potenziell aktiv sein könnte (oder bereits ist)
+            updateBlinkState(); 
              if (getCurrentTimeInMinutes() >= feierabendMoeglichMin) {
-                 if (!blinkInterval) { // Verhindere mehrere Intervalle
-                    blinkInterval = setInterval(updateBlinkState, 1000); // Prüfe jede Sekunde
+                 if (!blinkInterval) { 
+                    blinkInterval = setInterval(updateBlinkState, 1000); 
                  }
              } else if (feierabendMoeglichMin - getCurrentTimeInMinutes() < 60 && feierabendMoeglichMin - getCurrentTimeInMinutes() > 0) {
-                // Wenn Feierabend in weniger als 60 Min ist, starte das Intervall schon mal, um pünktlich zu blinken
                 if (!blinkInterval) {
                     blinkInterval = setInterval(updateBlinkState, 1000);
                 }
@@ -610,19 +584,15 @@
             }
         }
         
-        // Alle Eingabefelder (inkl. Sollzeit jetzt)
         const alleEingabeFelder = [sollzeitInput, kommen1Input, gehen1Input, kommen2Input, gehen2Input];
         alleEingabeFelder.forEach(feld => {
             feld.addEventListener('input', berechneUndZeigeZeiten);
-            // Mausrad-Listener für alle type="time" Felder
             if (feld.type === 'time') {
                  feld.addEventListener('wheel', handleTimeInputMouseWheel, { passive: false }); 
             }
         });
         
         berechneUndZeigeZeiten();
-        // Initiales Setup für das Blinken, falls die Seite mit passenden Werten geladen wird
-        // (z.B. durch Browser-Vorbelegung oder gespeicherte Werte, hier aber harte Vorbelegung)
         checkAndToggleBlinking(zeitInMinuten(voraussichtlichesEndeSpan.textContent)); 
     </script>
 </body>
