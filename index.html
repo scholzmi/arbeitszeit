@@ -159,12 +159,11 @@
         
         .sollzeit-input-group {
             display: flex;
-            gap: 16px; /* Gleicher Gap wie .form-grid */
-            /* align-items: flex-end; */ /* Entfernt, Standard-Ausrichtung (stretch) ist ok */
+            gap: 16px; 
         }
         .sollzeit-manual-input,
         .sollzeit-schnellwahl {
-            flex: 1; /* Beide Elemente nehmen gleichen Platz ein */
+            flex: 1; 
         }
 
 
@@ -414,6 +413,33 @@
         const closeModalButton = document.getElementById('closeModalButton');
 
         let blinkInterval = null; 
+        let notificationSentForCurrentFeierabend = false; // Hinzugefügt: Flag für Benachrichtigung
+
+        // Funktion, um Benachrichtigungs-Berechtigung anzufragen
+        function requestNotificationPermission() {
+            if (!("Notification" in window)) {
+                console.log("Dieser Browser unterstützt keine Desktop-Benachrichtigungen.");
+            } else if (Notification.permission === "granted") {
+                // console.log("Berechtigung für Benachrichtigungen bereits erteilt.");
+            } else if (Notification.permission !== "denied") {
+                Notification.requestPermission().then(function (permission) {
+                    if (permission === "granted") {
+                        // console.log("Berechtigung für Benachrichtigungen erteilt.");
+                    }
+                });
+            }
+        }
+
+        // Funktion, um die Feierabend-Benachrichtigung anzuzeigen
+        function showFeierabendNotification() {
+            if (Notification.permission === "granted") {
+                const notification = new Notification("Feierabendrechner", {
+                    body: "Es ist Zeit für den Feierabend!",
+                    icon: "wecker.png" // Dein Favicon
+                });
+            }
+        }
+
 
         function showErrorModal(message) {
             modalErrorMessage.textContent = message;
@@ -478,7 +504,7 @@
             return now.getHours() * 60 + now.getMinutes();
         }
 
-        function checkAndToggleBlinking(feierabendMoeglichMin) {
+        function checkAndToggleBlinkingAndNotify(feierabendMoeglichMin) { // Umbenannt
             if (blinkInterval) {
                 clearInterval(blinkInterval);
                 blinkInterval = null;
@@ -489,12 +515,17 @@
                 return;
             }
 
-            function updateBlinkState() {
+            function updateState() { // Umbenannt
                 const currentTimeMin = getCurrentTimeInMinutes();
                 if (currentTimeMin >= feierabendMoeglichMin) {
                     feierabendZeile.classList.add('blink-feierabend');
+                    if (!notificationSentForCurrentFeierabend && Notification.permission === "granted") {
+                        showFeierabendNotification();
+                        notificationSentForCurrentFeierabend = true; 
+                    }
                 } else {
                     feierabendZeile.classList.remove('blink-feierabend');
+                    // notificationSentForCurrentFeierabend bleibt true, bis eine neue Zeit berechnet wird
                     if (blinkInterval) { 
                         clearInterval(blinkInterval);
                         blinkInterval = null;
@@ -502,20 +533,23 @@
                 }
             }
             
-            updateBlinkState(); 
+            updateState(); 
              if (getCurrentTimeInMinutes() >= feierabendMoeglichMin) {
                  if (!blinkInterval) { 
-                    blinkInterval = setInterval(updateBlinkState, 1000); 
+                    blinkInterval = setInterval(updateState, 1000); 
                  }
              } else if (feierabendMoeglichMin - getCurrentTimeInMinutes() < 60 && feierabendMoeglichMin - getCurrentTimeInMinutes() > 0) {
+                // Starte Intervall auch, wenn Feierabend bald ist, um rechtzeitig zu benachrichtigen/blinken
                 if (!blinkInterval) {
-                    blinkInterval = setInterval(updateBlinkState, 1000);
+                    blinkInterval = setInterval(updateState, 1000);
                 }
              }
         }
 
 
         function berechneUndZeigeZeiten() {
+            notificationSentForCurrentFeierabend = false; // Reset für jede neue Berechnung
+
             const sollzeitValue = sollzeitInput.value; 
             const kommen1Value = kommen1Input.value;
             const gehen1Value = gehen1Input.value;
@@ -549,7 +583,7 @@
                 }
             }
             voraussichtlichesEndeSpan.textContent = minutenInZeit(feierabendMoeglichMin);
-            checkAndToggleBlinking(feierabendMoeglichMin);
+            checkAndToggleBlinkingAndNotify(feierabendMoeglichMin); // Umbenannt
 
 
             gearbeiteteZeitSpan.textContent = "--:--";
@@ -596,13 +630,15 @@
             }
         }
         
+        // Event Listener für Schnellauswahl
         sollzeitSchnellauswahl.addEventListener('change', function() {
             if (this.value) { 
                 sollzeitInput.value = this.value;
+                // Wichtig: 'input'-Event manuell auslösen, damit berechneUndZeigeZeiten() aufgerufen wird
                 sollzeitInput.dispatchEvent(new Event('input', { bubbles: true })); 
             }
         });
-
+        
         const alleEingabeFelder = [sollzeitInput, kommen1Input, gehen1Input, kommen2Input, gehen2Input];
         alleEingabeFelder.forEach(feld => {
             feld.addEventListener('input', berechneUndZeigeZeiten);
@@ -611,8 +647,12 @@
             }
         });
         
-        berechneUndZeigeZeiten();
-        checkAndToggleBlinking(zeitInMinuten(voraussichtlichesEndeSpan.textContent)); 
+        // Berechtigungen anfragen, wenn die Seite geladen wird
+        document.addEventListener('DOMContentLoaded', (event) => {
+            requestNotificationPermission();
+            berechneUndZeigeZeiten(); // Erste Berechnung
+            // Initiales Setup für das Blinken (wird in berechneUndZeigeZeiten aufgerufen)
+        });
     </script>
 </body>
 </html>
