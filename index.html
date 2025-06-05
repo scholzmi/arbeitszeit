@@ -90,16 +90,22 @@
 
         @media (max-width: 480px) {
             header {
-                /* flex-direction: column; /* Beibehalten oder anpassen, je nach gewünschtem Verhalten des Titels */
-                /* align-items: center; */ /* Wenn QR weg ist, kann Titel wieder links sein oder zentriert */
-                text-align: center; /* Zentriert den Titel, wenn QR weg ist */
-                justify-content: center; /* Zentriert den Titel, wenn QR weg ist */
+                flex-direction: column; /* Titel und QR/Link-Bereich untereinander */
+                align-items: center; 
+                text-align: center; 
             }
             header h1 {
-                text-align: center; /* Stellt sicher, dass H1 zentriert ist */
+                text-align: center; 
+                font-size: 1.5em; /* Ggf. Schriftgröße für Titel auf Mobil anpassen */
             }
-            .header-qr {
-                display: none; /* QR-Code und Link auf Mobilgeräten ausblenden */
+            .header-qr img { /* Nur das Bild ausblenden */
+                display: none; 
+            }
+            .header-qr { /* Sicherstellen, dass der Container für den Link noch da ist */
+                margin-top: 10px; /* Etwas Abstand für den Link zum Titel */
+            }
+            .header-qr a.paypal-link {
+                font-size: 0.8em; /* Ggf. Linkgröße für bessere Klickbarkeit anpassen */
             }
         }
 
