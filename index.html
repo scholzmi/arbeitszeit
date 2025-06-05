@@ -50,7 +50,7 @@
             justify-content: space-between; 
             align-items: center; 
             margin-bottom: 16px; 
-            gap: 10px; /* Abstand im Header reduziert */
+            gap: 10px; 
         }
 
         .header-text {
@@ -110,7 +110,7 @@
             }
         }
         
-        .form-section { /* Abstand zwischen den Hauptblöcken */
+        .form-section { 
             margin-bottom: 20px;
         }
         .form-section:last-of-type {
@@ -122,9 +122,7 @@
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 16px;
-            /* margin-bottom: 16px; Entfernt, wird jetzt über .form-section gesteuert */
         }
-        /* .form-section .form-grid:last-of-type wurde entfernt */
 
 
         .form-group label {
@@ -161,16 +159,12 @@
         
         .sollzeit-input-group {
             display: flex;
-            gap: 10px; /* Abstand zwischen manuellem Feld und Schnellauswahl */
-            align-items: flex-end; /* Label und Input auf gleicher Höhe */
+            gap: 16px; /* Gleicher Gap wie .form-grid */
+            /* align-items: flex-end; */ /* Entfernt, Standard-Ausrichtung (stretch) ist ok */
         }
-        .sollzeit-manual-input {
-            flex-grow: 1; /* Nimmt verfügbaren Platz ein, wird ca. 50% wenn select daneben ist */
-             min-width: 100px; /* Mindestbreite, um nicht zu klein zu werden */
-        }
+        .sollzeit-manual-input,
         .sollzeit-schnellwahl {
-            flex-basis: 120px; /* Feste Basisbreite für die Schnellauswahl */
-            flex-shrink: 0;
+            flex: 1; /* Beide Elemente nehmen gleichen Platz ein */
         }
 
 
@@ -309,7 +303,7 @@
         </header>
 
         <form id="arbeitszeitForm">
-            <div class="form-section"> <!-- Container für Sollzeit -->
+            <div class="form-section"> 
                 <div class="form-group">
                     <label for="sollzeit">
                         <span class="material-icons">timer</span>Soll-Arbeitszeit
@@ -327,7 +321,7 @@
                 </div>
             </div>
 
-            <div class="form-section"> <!-- Container für das erste Zeit-Pärchen -->
+            <div class="form-section"> 
                 <div class="form-grid">
                     <div class="form-group">
                         <label for="kommen1">
@@ -344,7 +338,7 @@
                 </div>
             </div>
 
-            <div class="form-section"> <!-- Container für das zweite Zeit-Pärchen -->
+            <div class="form-section"> 
                 <div class="form-grid">
                     <div class="form-group">
                         <label for="kommen2">
@@ -409,7 +403,7 @@
         const feierabendZeile = document.getElementById('feierabendZeile'); 
 
         const sollzeitInput = document.getElementById('sollzeit'); 
-        const sollzeitSchnellauswahl = document.getElementById('sollzeitSchnellauswahl'); // Neue Variable
+        const sollzeitSchnellauswahl = document.getElementById('sollzeitSchnellauswahl');
         const kommen1Input = document.getElementById('kommen1');
         const gehen1Input = document.getElementById('gehen1');
         const kommen2Input = document.getElementById('kommen2');
@@ -602,11 +596,10 @@
             }
         }
         
-        // Event Listener für Schnellauswahl
         sollzeitSchnellauswahl.addEventListener('change', function() {
-            if (this.value) { // Nur wenn ein Wert ausgewählt ist (nicht die "Schnellwahl"-Option)
+            if (this.value) { 
                 sollzeitInput.value = this.value;
-                sollzeitInput.dispatchEvent(new Event('input', { bubbles: true })); // Berechnung auslösen
+                sollzeitInput.dispatchEvent(new Event('input', { bubbles: true })); 
             }
         });
 
