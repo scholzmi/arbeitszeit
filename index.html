@@ -29,7 +29,7 @@
             display: flex;
             flex-direction: column; 
             align-items: center;
-            min-height: 100vh; /* Stellt sicher, dass der Body mindestens die volle Viewport-Höhe hat */
+            min-height: 100vh; 
             box-sizing: border-box;
         }
 
@@ -41,7 +41,7 @@
             width: 100%;
             max-width: 500px; 
             box-sizing: border-box;
-            margin-bottom: 20px; /* Abstand zum zentrierten Impressum */
+            margin-bottom: 20px; 
         }
         
         header {
@@ -49,7 +49,7 @@
             justify-content: space-between; 
             align-items: center; 
             margin-bottom: 24px;
-            gap: 15px; /* Etwas weniger Gap für kleinere Bildschirme */
+            gap: 15px; 
         }
 
         .header-text {
@@ -58,7 +58,7 @@
 
         header h1 {
             color: var(--primary-color);
-            font-size: 1.7em; /* Angepasst für bessere Responsivität */
+            font-size: 1.7em; 
             font-weight: 500;
             margin-bottom: 4px; 
             text-align: left; 
@@ -66,7 +66,7 @@
 
         header p.subtitle { 
             color: var(--text-color-light);
-            font-size: 0.85em; /* Angepasst */
+            font-size: 0.85em; 
             margin-bottom: 0;
             text-align: left; 
         }
@@ -77,8 +77,8 @@
         }
 
         .header-qr img {
-            width: 70px; /* Angepasst */
-            height: 70px; /* Angepasst */
+            width: 70px; 
+            height: 70px; 
             display: block;
             margin: 0 auto 5px auto; 
             border: 1px solid var(--border-color);
@@ -86,28 +86,27 @@
             background-color: white;
         }
         .header-qr a.paypal-link {
-            font-size: 0.7em; /* Angepasst */
+            font-size: 0.7em; 
             color: var(--primary-color);
             text-decoration: none;
-            display: block; /* Stellt sicher, dass der Link unter dem Bild steht */
+            display: block; 
         }
         .header-qr a.paypal-link:hover {
             text-decoration: underline;
         }
 
-        /* Responsive Anpassung für den Header auf kleinen Bildschirmen */
         @media (max-width: 480px) {
             header {
-                flex-direction: column; /* Elemente untereinander anordnen */
-                align-items: center; /* Zentriert die Elemente horizontal */
-                text-align: center; /* Zentriert den Text im Header-Text-Bereich */
+                flex-direction: column; 
+                align-items: center; 
+                text-align: center; 
                 gap: 15px;
             }
             header h1, header p.subtitle {
-                text-align: center; /* Text zentrieren */
+                text-align: center; 
             }
             .header-qr {
-                margin-top: 10px; /* Kleiner Abstand nach oben für den QR-Bereich */
+                margin-top: 10px; 
             }
         }
 
@@ -128,7 +127,7 @@
             gap: 16px;
         }
 
-        @media (min-width: 480px) { /* Behält das zweispaltige Layout für breitere Bildschirme bei */
+        @media (min-width: 480px) { 
             .form-grid {
                 grid-template-columns: 1fr 1fr;
             }
@@ -266,11 +265,10 @@
             background-color: var(--primary-color-dark);
         }
 
-        /* Angepasstes Impressum: zentriert unter der Karte */
         .footer-imprint {
             width: 100%;
-            max-width: 500px; /* Passt zur Breite der Karte */
-            margin: 30px auto 20px auto; /* Zentriert horizontal, mit vertikalem Abstand */
+            max-width: 500px; 
+            margin: 30px auto 20px auto; 
             text-align: center;
             font-size: 0.75em; 
             color: #888;      
@@ -368,16 +366,19 @@
             
             <hr class="result-divider">
             
+            <!-- Entferntes Element für Soll-Arbeitszeit Anzeige -->
+            <!-- 
             <div class="result-item">
                 <span class="result-label">Soll-Arbeitszeit</span>
                 <span class="result-value" id="sollArbeitszeitDisplay">07:30</span>
             </div>
+             -->
+
             <div class="result-item">
                 <span class="result-label">Differenz</span>
                 <span class="result-value" id="differenzZeit">--:--</span>
             </div>
              <div class="result-item">
-                <!-- Text geändert -->
                 <span class="result-label">Frühestes Arbeitszeitende</span>
                 <span class="result-value" id="voraussichtlichesEnde">--:--</span>
             </div>
@@ -398,18 +399,17 @@
         </div>
     </div>
 
-    <!-- Impressum zentriert unter der Karte -->
     <div class="footer-imprint">
         michael scholz, kleeweg 8, 22885 barsbüttel | <a href="mailto:mts@murena.io">mts@murena.io</a> | <a href="tel:+491744825558">+49 174 482 5558</a>
     </div>
 
     <script>
-        const ergebnisDiv = document.getElementById('ergebnis');
+        // DOM-Elemente abrufen
         const gearbeiteteZeitSpan = document.getElementById('gearbeiteteZeit');
         const pausenZeitSpan = document.getElementById('pausenZeit');
         const differenzZeitSpan = document.getElementById('differenzZeit');
         const voraussichtlichesEndeSpan = document.getElementById('voraussichtlichesEnde');
-        const sollArbeitszeitDisplaySpan = document.getElementById('sollArbeitszeitDisplay');
+        // const sollArbeitszeitDisplaySpan = document.getElementById('sollArbeitszeitDisplay'); // Nicht mehr benötigt
 
         const sollzeitInput = document.getElementById('sollzeit'); 
         const kommen1Input = document.getElementById('kommen1');
@@ -492,7 +492,7 @@
             const kommen2Min = zeitInMinuten(kommen2Value);
             const gehen2Min = zeitInMinuten(gehen2Value);
 
-            sollArbeitszeitDisplaySpan.textContent = minutenInZeit(aktuelleSollzeitMinuten);
+            // sollArbeitszeitDisplaySpan.textContent = minutenInZeit(aktuelleSollzeitMinuten); // Nicht mehr benötigt
             differenzZeitSpan.className = 'result-value'; 
 
             let tatsaechlichePausenzeitMin = NaN;
