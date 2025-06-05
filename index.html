@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Feierabendrechner</title>
-    <!-- Favicon Link angepasst -->
     <link rel="icon" href="wecker.png" type="image/png">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
@@ -91,16 +90,16 @@
 
         @media (max-width: 480px) {
             header {
-                flex-direction: column; 
-                align-items: center; 
-                text-align: center; 
-                gap: 15px;
+                /* flex-direction: column; /* Beibehalten oder anpassen, je nach gewünschtem Verhalten des Titels */
+                /* align-items: center; */ /* Wenn QR weg ist, kann Titel wieder links sein oder zentriert */
+                text-align: center; /* Zentriert den Titel, wenn QR weg ist */
+                justify-content: center; /* Zentriert den Titel, wenn QR weg ist */
             }
             header h1 {
-                text-align: center; 
+                text-align: center; /* Stellt sicher, dass H1 zentriert ist */
             }
             .header-qr {
-                margin-top: 10px; 
+                display: none; /* QR-Code und Link auf Mobilgeräten ausblenden */
             }
         }
 
