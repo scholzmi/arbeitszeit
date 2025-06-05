@@ -50,7 +50,7 @@
             justify-content: space-between; 
             align-items: center; 
             margin-bottom: 16px; 
-            gap: 15px; 
+            gap: 10px; /* Abstand im Header reduziert */
         }
 
         .header-text {
@@ -93,7 +93,7 @@
                 flex-direction: column; 
                 align-items: center; 
                 text-align: center;
-                gap: 5px; /* Abstand zwischen Titel und Paypal-Link (mobil) reduziert */
+                gap: 5px; 
             }
             header h1 {
                 text-align: center; 
@@ -103,35 +103,28 @@
                 display: none; 
             }
             .header-qr { 
-                margin-top: 5px; /* Abstand für den Link zum Titel (mobil) reduziert */
+                margin-top: 5px; 
             }
             .header-qr a.paypal-link {
                 font-size: 0.8em; 
             }
         }
-
-        /* .form-section h2 wurde entfernt, da die Überschriften entfernt wurden */
-        /*
-        .form-section h2 {
-            color: var(--primary-color-dark);
-            font-size: 1.25em;
-            font-weight: 500;
-            margin-top: 20px;
-            margin-bottom: 12px;
-            border-bottom: 1px solid var(--primary-color-light);
-            padding-bottom: 8px;
+        
+        .form-section { /* Abstand zwischen den Hauptblöcken */
+            margin-bottom: 20px;
         }
-        */
+        .form-section:last-of-type {
+            margin-bottom: 0;
+        }
 
-        .form-grid { /* Gilt jetzt immer, Kommen/Gehen immer nebeneinander */
+
+        .form-grid { 
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 16px;
-            margin-bottom: 16px; /* Abstand zwischen den Zeit-Pärchen */
+            /* margin-bottom: 16px; Entfernt, wird jetzt über .form-section gesteuert */
         }
-        .form-section .form-grid:last-of-type { /* Kein unterer Margin für das letzte Grid */
-            margin-bottom: 0;
-        }
+        /* .form-section .form-grid:last-of-type wurde entfernt */
 
 
         .form-group label {
@@ -149,7 +142,7 @@
             color: var(--primary-color);
         }
 
-        .input-field {
+        .input-field, .select-field {
             width: 100%;
             padding: 10px;
             border: 1px solid var(--primary-color-light);
@@ -160,11 +153,26 @@
             background-color: white; 
         }
 
-        .input-field:focus {
+        .input-field:focus, .select-field:focus {
             border-color: var(--primary-color);
             box-shadow: 0 0 0 2px rgba(33, 150, 243, 0.2);
             outline: none;
         }
+        
+        .sollzeit-input-group {
+            display: flex;
+            gap: 10px; /* Abstand zwischen manuellem Feld und Schnellauswahl */
+            align-items: flex-end; /* Label und Input auf gleicher Höhe */
+        }
+        .sollzeit-manual-input {
+            flex-grow: 1; /* Nimmt verfügbaren Platz ein, wird ca. 50% wenn select daneben ist */
+             min-width: 100px; /* Mindestbreite, um nicht zu klein zu werden */
+        }
+        .sollzeit-schnellwahl {
+            flex-basis: 120px; /* Feste Basisbreite für die Schnellauswahl */
+            flex-shrink: 0;
+        }
+
 
         .result-section {
             margin-top: 20px; 
@@ -306,12 +314,20 @@
                     <label for="sollzeit">
                         <span class="material-icons">timer</span>Soll-Arbeitszeit
                     </label>
-                    <input type="time" id="sollzeit" class="input-field" value="07:30" required>
+                    <div class="sollzeit-input-group">
+                        <input type="time" id="sollzeit" class="input-field sollzeit-manual-input" value="07:30" required>
+                        <select id="sollzeitSchnellauswahl" class="select-field sollzeit-schnellwahl">
+                            <option value="">Schnellwahl</option>
+                            <option value="07:00">07:00</option>
+                            <option value="07:30">07:30</option>
+                            <option value="07:48">07:48</option>
+                            <option value="08:00">08:00</option>
+                        </select>
+                    </div>
                 </div>
             </div>
 
             <div class="form-section"> <!-- Container für das erste Zeit-Pärchen -->
-                <!-- <h2>Vormittag</h2> Entfernt -->
                 <div class="form-grid">
                     <div class="form-group">
                         <label for="kommen1">
@@ -329,7 +345,6 @@
             </div>
 
             <div class="form-section"> <!-- Container für das zweite Zeit-Pärchen -->
-                <!-- <h2>Nachmittag</h2> Entfernt -->
                 <div class="form-grid">
                     <div class="form-group">
                         <label for="kommen2">
@@ -394,6 +409,7 @@
         const feierabendZeile = document.getElementById('feierabendZeile'); 
 
         const sollzeitInput = document.getElementById('sollzeit'); 
+        const sollzeitSchnellauswahl = document.getElementById('sollzeitSchnellauswahl'); // Neue Variable
         const kommen1Input = document.getElementById('kommen1');
         const gehen1Input = document.getElementById('gehen1');
         const kommen2Input = document.getElementById('kommen2');
@@ -586,6 +602,14 @@
             }
         }
         
+        // Event Listener für Schnellauswahl
+        sollzeitSchnellauswahl.addEventListener('change', function() {
+            if (this.value) { // Nur wenn ein Wert ausgewählt ist (nicht die "Schnellwahl"-Option)
+                sollzeitInput.value = this.value;
+                sollzeitInput.dispatchEvent(new Event('input', { bubbles: true })); // Berechnung auslösen
+            }
+        });
+
         const alleEingabeFelder = [sollzeitInput, kommen1Input, gehen1Input, kommen2Input, gehen2Input];
         alleEingabeFelder.forEach(feld => {
             feld.addEventListener('input', berechneUndZeigeZeiten);
